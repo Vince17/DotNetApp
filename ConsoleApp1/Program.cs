@@ -3,6 +3,7 @@ using System.Device.Gpio;
 using System.Threading;
 using System.Threading.Tasks;
 
+
 namespace ConsoleApp1
 {
     class Program
@@ -17,6 +18,8 @@ namespace ConsoleApp1
 
             ReadBtn();
             //blindTask.Wait();
+
+        
         }
         static private void ReadBtn()
         { 
