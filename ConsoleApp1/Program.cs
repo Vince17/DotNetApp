@@ -1,61 +1,61 @@
 ﻿using System;
 using System.Device.Gpio;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ConsoleApp1
+namespace Test_Button
 {
-    class Program
+    public class Program
     {
-        static private int LED_PIN = 18;
-        static private int BTN_PIN = 23;
-        static void Main(string[] args)
+        public static int LED_PIN = 18;
+        public static int BTN_PIN = 23;
+        public static PinValue StatBtn = PinValue.High;
+
+        public static void Main(string[] args)
         {
-            //var readButtonTask = Task.Run(() => ReadBtn());
-            //var blindTask = Task.Run(() => Blink());
-            //readButtonTask.Wait();
-
-            ReadBtn();
-            //blindTask.Wait();
+            Console.WriteLine("Sonnette en fonctionnement");
+            ButtonPress();
         }
-        static private void ReadBtn()
-        { 
-            using var controller = new GpioController();
-            controller.OpenPin(BTN_PIN, PinMode.Input);
-            bool noHigh = true;
-             
-            while (noHigh)
-            {
-                Console.WriteLine("Bouton non pressé");
-                PinValue btnVal = controller.Read(BTN_PIN);
 
-                if(btnVal == PinValue.Low){
-                    noHigh = false;
-                };
-
-                if (!noHigh)
-                {
-                    Console.WriteLine("Bouton pressé !!!!");
-                    Blink();
-                }
-                Thread.Sleep(200);
-            }
-
-            
-        }
-        static private void Blink()
+        private static void ButtonPress()
         {
             using var controller = new GpioController();
-            controller.OpenPin(LED_PIN, PinMode.Output);
-            bool ledOn = true;
+
             while (true)
             {
-                controller.Write(LED_PIN, ((ledOn) ? PinValue.High : PinValue.Low));
-                Thread.Sleep(500);
-                Console.WriteLine("High");
-                ledOn = !ledOn;
-                Console.WriteLine("Low");
+                controller.OpenPin(BTN_PIN, PinMode.Input);
+                PinValue btnVal = controller.Read(BTN_PIN);
+                controller.ClosePin(BTN_PIN);
+                if (btnVal != StatBtn)
+                {
+                    if (btnVal == PinValue.Low)
+                    {
+                        Console.WriteLine("On t'appelle !");
+                        //CallAPI();
+                        controller.OpenPin(LED_PIN, PinMode.Output);
+                        controller.Write(LED_PIN, PinValue.High);
+                        Thread.Sleep(1000);
+                        controller.ClosePin(LED_PIN);
+                    }
+                    else
+                    {
+                        controller.OpenPin(LED_PIN, PinMode.Output);
+                        controller.Write(LED_PIN, PinValue.Low);
+                        controller.ClosePin(LED_PIN);
+                    }
+                    StatBtn = PinValue.High;
+                }
             }
         }
+
+        //static private bool CallAPI()
+        //{
+        //    HttpClient client = new HttpClient();
+        //    client.BaseAddress = new Uri("http://192.168.29.38:5001/")
+        //    HttpResponseMessage message = client.PostAsync("Sonnette", new StringContent("Dring dring").Result
+        //    return message.IsSuccessStatusCode;
+        //}
+
     }
 }
