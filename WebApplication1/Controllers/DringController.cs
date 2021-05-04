@@ -26,7 +26,7 @@ namespace WebApplication1.Controllers
         public async Task<string> GetAsync()
         {
             string message = DateTime.Now.ToString() + ("dring dring");
-            await _chatHub.Clients.All.SendAsync("SendMessage", message);
+            await _chatHub.Clients.All.SendAsync("ReceiveDring", message);
             return "dring test";
         }
     }
