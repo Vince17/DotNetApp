@@ -9,7 +9,7 @@ namespace WebApplication1.Hubs
 {
     public class ChatHub : Hub
     {
-        public async Task SendMessage(bool isDring)
+        public async Task SendMessage(string isDring)
         {
             await Clients.All.SendAsync("ReceiveDring", isDring);
         }

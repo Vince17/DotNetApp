@@ -15,7 +15,8 @@ connection.on("ReceiveMessage", function (user, message) {
 });*/
 
 connection.on("ReceiveDring", function (isDring) {
-    var h = " test ";
+    var message = isDring;
+    /*var  = " test ";
     var d = new Date();
     if (isDring) {
         h = "ça sonne !";
@@ -23,7 +24,8 @@ connection.on("ReceiveDring", function (isDring) {
         h = "ça ne sonne pas !";
     }
     h = h + " at : " + d.getHours() + "h" + d.getMinutes() + ":" + d.getSeconds();
-    document.getElementById("sonne").innerHTML = h;
+    document.getElementById("sonne").innerHTML = h;*/
+    document.getElementById("sonne").innerHTML = message;
 });
 
 connection.start().then(function () {
