@@ -31,31 +31,50 @@ namespace Test_Button
                 {
                     if (btnVal == PinValue.Low)
                     {
-                        Console.WriteLine("On t'appelle !");
-                        //CallAPI();
-                        controller.OpenPin(LED_PIN, PinMode.Output);
-                        controller.Write(LED_PIN, PinValue.High);
-                        Thread.Sleep(1000);
-                        controller.ClosePin(LED_PIN);
-                    }
-                    else
-                    {
-                        controller.OpenPin(LED_PIN, PinMode.Output);
-                        controller.Write(LED_PIN, PinValue.Low);
-                        controller.ClosePin(LED_PIN);
+                        if (CallAPI())
+                        {
+                            Console.WriteLine("On t'appelle !");
+                            controller.OpenPin(LED_PIN, PinMode.Output);
+                            controller.Write(LED_PIN, PinValue.High);
+                            Thread.Sleep(1000);
+                            controller.ClosePin(LED_PIN);
+                        }
+                        else
+                        {
+                            controller.OpenPin(LED_PIN, PinMode.Output);
+                            controller.Write(LED_PIN, PinValue.Low);
+                            controller.ClosePin(LED_PIN);
+                        }
                     }
                     StatBtn = PinValue.High;
                 }
             }
         }
 
-        //static private bool CallAPI()
-        //{
-        //    HttpClient client = new HttpClient();
-        //    client.BaseAddress = new Uri("http://192.168.29.38:5001/")
-        //    HttpResponseMessage message = client.PostAsync("Sonnette", new StringContent("Dring dring").Result
-        //    return message.IsSuccessStatusCode;
-        //}
+        private static bool CallAPI()
+        {
+
+            HttpClient client = new HttpClient();
+
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri("http://192.168.29.90"),
+            };
+
+            HttpResponseMessage response = client.Send(request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                Console.Write("Request succeed");
+                return true;
+            }
+            else
+            {
+                Console.Write("Request failed");
+                return false;
+            }
+        }
 
     }
 }
